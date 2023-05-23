@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Calender.css";
 
 const Calendar = () => {
   const [appointments, setAppointments] = useState([]);
@@ -10,7 +9,14 @@ const Calendar = () => {
         Name: "Kevin",
         Motif: "Premier Consult",
         start: "1050",
-        end: "1350",
+        end: "1450",
+        day: "Lundi",
+      },
+      {
+        Name: "Kevin",
+        Motif: "Premier Consult",
+        start: "1650",
+        end: "1800",
         day: "Lundi",
       },
       {

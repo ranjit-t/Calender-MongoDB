@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import AppointmentForm from "./AppointmentForm";
-import Calendar from "./Calender";
+import AppointmentForm from "./Components/AppointmentForm";
+import Calendar from "./Components/Calender";
 
 function App() {
   const [newForm, setNewForm] = useState(false);
