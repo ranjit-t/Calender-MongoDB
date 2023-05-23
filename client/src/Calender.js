@@ -7,18 +7,24 @@ const Calendar = () => {
   useEffect(() => {
     const initialAppointments = [
       {
-        title: "Appointment 1",
-        start: "10h",
-        end: "12h",
+        Name: "Kevin",
+        Motif: "Premier Consult",
+        start: "1050",
+        end: "1350",
         day: "Monday",
       },
       {
-        title: "Appointment 2",
-        start: "12h",
-        end: "14h",
+        Name: "Ram",
+        start: "1200",
+        end: "1400",
         day: "Wednesday",
       },
-      // Add more appointments as needed
+      {
+        Name: "Sam",
+        start: "1200",
+        end: "1500",
+        day: "Saturday",
+      },
     ];
 
     setAppointments(initialAppointments);
@@ -34,15 +40,6 @@ const Calendar = () => {
     "Sunday",
   ];
 
-  let DIVstyle = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: "auto",
-  };
-
   return (
     <div className="h-full flex items-center justify-center">
       <table className="calendar">
@@ -50,7 +47,9 @@ const Calendar = () => {
           <tr>
             <th></th>
             {daysOfWeek.map((day) => (
-              <th key={day}>{day}</th>
+              <th key={day}>
+                <div>{day}</div>
+              </th>
             ))}
           </tr>
         </thead>
@@ -59,7 +58,7 @@ const Calendar = () => {
             <tr key={hour}>
               <td
                 className="border-t border-gray-300 p-2"
-                style={{ width: "2vw", height: "7vh" }}
+                style={{ width: "2vw", height: "8vh" }}
               >
                 <div style={{ marginTop: "-5vh", marginLeft: "-5vw" }}>
                   {hour}:00
@@ -67,19 +66,31 @@ const Calendar = () => {
               </td>
               {daysOfWeek.map((day, index) => {
                 const appointment = appointments.find(
-                  (appt) => appt.day === day && appt.start === `${hour}h`
+                  (appt) =>
+                    appt.day === day &&
+                    `${hour}00` <= appt.start &&
+                    appt.start < `${hour + 1}00`
                 );
                 return (
                   <td
                     key={index}
-                    className="border border-gray-300 p-2"
-                    style={{ width: "10vw", position: "relative" }}
+                    className="relative border border-gray-300 p-2 w-[10vw]"
                   >
                     <div
-                      className={appointment ? "appointment-slot" : ""}
-                      style={DIVstyle}
+                      className={
+                        appointment
+                          ? "absolute inset-0 overflow-auto w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg"
+                          : ""
+                      }
+                      style={{
+                        height: `${
+                          ((appointment?.end - appointment?.start) * 8) / 100
+                        }vh`,
+                        marginTop: appointment?.start % 100 !== 0 ? "4vh" : "0",
+                      }}
                     >
-                      {appointment ? appointment.title : ""}
+                      <p>{appointment?.Name}</p>
+                      <p>{appointment?.Motif}</p>
                     </div>
                   </td>
                 );
