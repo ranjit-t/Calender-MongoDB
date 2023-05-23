@@ -11,19 +11,19 @@ const Calendar = () => {
         Motif: "Premier Consult",
         start: "1050",
         end: "1350",
-        day: "Monday",
+        day: "Lundi",
       },
       {
         Name: "Ram",
         start: "1200",
         end: "1400",
-        day: "Wednesday",
+        day: "Mercredi",
       },
       {
         Name: "Sam",
         start: "1200",
         end: "1500",
-        day: "Saturday",
+        day: "Samedi",
       },
     ];
 
@@ -31,13 +31,13 @@ const Calendar = () => {
   }, []);
 
   const daysOfWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche",
   ];
 
   return (
@@ -47,7 +47,7 @@ const Calendar = () => {
           <tr>
             <th></th>
             {daysOfWeek.map((day) => (
-              <th key={day}>
+              <th key={day} className="overflow-hidden max-w-[10vw]">
                 <div>{day}</div>
               </th>
             ))}
@@ -60,7 +60,7 @@ const Calendar = () => {
                 className="border-t border-gray-300 p-2"
                 style={{ width: "2vw", height: "8vh" }}
               >
-                <div style={{ marginTop: "-5vh", marginLeft: "-5vw" }}>
+                <div style={{ marginTop: "-5.5vh", marginLeft: "-5vw" }}>
                   {hour}:00
                 </div>
               </td>
