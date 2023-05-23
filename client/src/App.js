@@ -10,7 +10,7 @@ function App() {
       <h1 className="text-4xl mb-8">ALLAW - CALENDRIER</h1>
       <Calendar />
       <button
-        className="border border-collapse m-8 bg-sky-400 text-white w-32"
+        className="border border-collapse m-8 bg-sky-400 text-white w-32 hover:bg-sky-600"
         onClick={() => {
           setNewForm((prev) => !prev);
         }}

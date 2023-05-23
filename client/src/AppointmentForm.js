@@ -116,13 +116,13 @@ export default function AppointmentForm({ setNewForm }) {
 
         <button
           type="submit"
-          className="border border-collapse mb-2 bg-emerald-800 text-white p-1 rounded-md w-32"
+          className="border border-collapse mb-2 bg-emerald-700 text-white p-1 rounded-md w-32 hover:bg-emerald-900"
         >
           Ajouter
         </button>
       </form>
       <button
-        className="border border-collapse  bg-rose-500 text-white p-1 rounded-md"
+        className="border border-collapse bg-rose-500 text-white p-1 rounded-md hover:bg-rose-600"
         onClick={() => {
           setNewForm(false);
         }}
