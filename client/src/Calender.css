@@ -1,0 +1,9 @@
+.appointment-slot {
+  height: 14vh;
+  width: 10vw;
+  background-color: aqua;
+  color: black;
+}
+td {
+  /* max-height: 7vh; */
+}
