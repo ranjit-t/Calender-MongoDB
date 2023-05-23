@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function AppointmentForm() {
+export default function AppointmentForm({ setNewForm }) {
   const [formData, setFormData] = useState({
     name: "",
     motive: "",
@@ -114,8 +114,21 @@ export default function AppointmentForm() {
         <br />
         <br />
 
-        <input type="submit" value="Submit" />
+        <button
+          type="submit"
+          className="border border-collapse mb-2 bg-emerald-800 text-white p-1 rounded-md w-32"
+        >
+          Ajouter
+        </button>
       </form>
+      <button
+        className="border border-collapse  bg-rose-500 text-white p-1 rounded-md"
+        onClick={() => {
+          setNewForm(false);
+        }}
+      >
+        Annuler
+      </button>
     </div>
   );
 }
