@@ -66,7 +66,7 @@ const Calendar = () => {
                 className="border-t border-gray-300 p-2"
                 style={{ width: "2vw", height: "6vh" }}
               >
-                <div style={{ marginTop: "-5.5vh", marginLeft: "-5vw" }}>
+                <div style={{ marginTop: "-4vh", marginLeft: "-5vw" }}>
                   {hour}:00
                 </div>
               </td>
