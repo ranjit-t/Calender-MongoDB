@@ -1,10 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import AppointmentForm from "./Components/AppointmentForm";
 import Calendar from "./Components/Calender";
 
 function App() {
   const [newForm, setNewForm] = useState(false);
+  const [appData, setAppData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch existing data
+    fetch("http://localhost:3005/api/formdata")
+      .then((response) => response.json())
+      .then((data) => {
+        setAppData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching existing data:", error);
+        setLoading(false);
+      });
+  }, [appData]);
+
+  useEffect(() => {
+    console.log(appData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, newForm]);
+
   return (
     <div className="App flex flex-col items-center m-8 relative">
       <h1 className="text-4xl mb-8">ALLAW - CALENDRIER</h1>
