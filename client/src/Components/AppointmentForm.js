@@ -1,26 +1,40 @@
 import React, { useState } from "react";
 
 export default function AppointmentForm({ setNewForm }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    motive: "",
-    description: "",
-    date: "",
-    starttime: "",
-    endtime: "",
-  });
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [date, setDate] = useState("");
+  const [name, setName] = useState("");
+  const [motif, setMotif] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+  const daysOfWeek = [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche",
+  ];
+
+  const handleDayButtonClick = (day) => {
+    setDate(day);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:3005/api/formdata ", {
+
+    const formData = {
+      name: name,
+      motif: motif,
+      description: description,
+      date: date,
+      startTime: startTime.replace(":", ""),
+      endTime: endTime.replace(":", ""),
+    };
+    console.log(formData);
+    fetch("http://localhost:5005/api/formdata ", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,20 +62,26 @@ export default function AppointmentForm({ setNewForm }) {
           type="text"
           id="name"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          placeholder="Prenom et Nom"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
           required
         />
         <br />
         <br />
 
-        <label htmlFor="motive">Motive:</label>
+        <label htmlFor="motif">Motife:</label>
         <input
           type="text"
-          id="motive"
-          name="motive"
-          value={formData.motive}
-          onChange={handleChange}
+          id="motif"
+          name="motif"
+          placeholder="motif"
+          value={motif}
+          onChange={(event) => {
+            setMotif(event.target.value);
+          }}
           required
         />
         <br />
@@ -71,46 +91,73 @@ export default function AppointmentForm({ setNewForm }) {
         <textarea
           id="description"
           name="description"
-          value={formData.description}
-          onChange={handleChange}
+          placeholder="description"
+          value={description}
+          onChange={(event) => {
+            setDescription(event.target.value);
+          }}
           required
         ></textarea>
         <br />
         <br />
 
-        <label htmlFor="date">Date:</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
+        <div>
+          {daysOfWeek.map((day) => (
+            <button
+              key={day}
+              type="button"
+              className={`day-button ${
+                date === day ? "bg-sky-400 text-white p-2 rounded-md" : "p-2"
+              }`}
+              onClick={() => handleDayButtonClick(day)}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
 
-        <label htmlFor="starttime">Start Time:</label>
-        <input
-          type="time"
-          id="starttime"
-          name="starttime"
-          value={formData.starttime}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-
-        <label htmlFor="endtime">End Time:</label>
-        <input
-          type="time"
-          id="endtime"
-          name="endtime"
-          value={formData.endtime}
-          onChange={handleChange}
-          required
-        />
+        <div>
+          <label htmlFor="timeInput">Starting Time:</label>
+          <select
+            id="timeInput"
+            value={startTime}
+            onChange={(event) => {
+              setStartTime(event.target.value);
+            }}
+          >
+            <option value="">-- Select Time --</option>
+            {[...Array(13)].map((_, index) => {
+              const hour = index + 8;
+              return (
+                <React.Fragment key={hour}>
+                  <option value={`${hour}:00`}>{`${hour}:00`}</option>
+                  <option value={`${hour}:30`}>{`${hour}:30`}</option>
+                </React.Fragment>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="timeInput">Ending Time:</label>
+          <select
+            id="timeInput"
+            value={endTime}
+            onChange={(event) => {
+              setEndTime(event.target.value);
+            }}
+          >
+            <option value="">-- Select Time --</option>
+            {[...Array(13)].map((_, index) => {
+              const hour = index + 8;
+              return (
+                <React.Fragment key={hour}>
+                  <option value={`${hour}:00`}>{`${hour}:00`}</option>
+                  <option value={`${hour}:30`}>{`${hour}:30`}</option>
+                </React.Fragment>
+              );
+            })}
+          </select>
+        </div>
         <br />
         <br />
 

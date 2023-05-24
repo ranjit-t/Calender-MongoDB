@@ -80,7 +80,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const port = process.env.PORT || 3005;
+const port = 5005;
 
 const uri =
   "mongodb+srv://ranjiththota:ranjiththota@cluster0.t8lms3t.mongodb.net/?retryWrites=true&w=majority";
@@ -99,9 +99,9 @@ const formDataSchema = new mongoose.Schema({
   name: String,
   motive: String,
   description: String,
-  date: Date,
-  starttime: String,
-  endtime: String,
+  date: String,
+  startTime: String,
+  endTime: String,
 });
 
 const FormData = mongoose.model("FormData", formDataSchema);
@@ -131,15 +131,15 @@ app.get("/api/formdata", (req, res) => {
 
 // API endpoint to post form data
 app.post("/api/formdata", (req, res) => {
-  const { name, motive, description, date, starttime, endtime } = req.body;
+  const { name, motif, description, date, startTime, endTime } = req.body;
 
   const newFormData = new FormData({
     name,
-    motive,
+    motif,
     description,
     date,
-    starttime,
-    endtime,
+    startTime,
+    endTime,
   });
 
   newFormData
