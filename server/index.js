@@ -97,7 +97,7 @@ mongoose
 //To Create a schema and model for the form data
 const formDataSchema = new mongoose.Schema({
   name: String,
-  motive: String,
+  motif: String,
   description: String,
   date: String,
   startTime: String,
