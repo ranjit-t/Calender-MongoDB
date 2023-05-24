@@ -40,8 +40,8 @@ function App() {
         Ajour RDV
       </button>
       {newForm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 ">
+          <div className="bg-white p-4 drop-shadow-lg rounded-lg p-8">
             <AppointmentForm setNewForm={setNewForm} />
           </div>
         </div>

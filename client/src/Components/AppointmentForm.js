@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export default function AppointmentForm({ setNewForm }) {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState("Lundi");
   const [name, setName] = useState("");
   const [motif, setMotif] = useState("");
   const [description, setDescription] = useState("");
@@ -54,54 +54,55 @@ export default function AppointmentForm({ setNewForm }) {
 
   return (
     <div>
-      <h1>Appointment Form</h1>
+      <h1 className="text-2xl font-bold mb-4">Ajouter un RDV</h1>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Prenom et Nom"
-          value={name}
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-          required
-        />
-        <br />
-        <br />
+        <div className="flex flex-col m2">
+          <label htmlFor="name">Nom : </label>
+          <input
+            className=" rounded-md p-1 bg-neutral-200"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Nom"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+            required
+          />
+        </div>
+        <div className="flex flex-col m2">
+          <label htmlFor="motif">Motif : </label>
+          <input
+            className="bg-neutral-200 rounded-md p-1"
+            type="text"
+            id="motif"
+            name="motif"
+            placeholder="motif"
+            value={motif}
+            onChange={(event) => {
+              setMotif(event.target.value);
+            }}
+            required
+          />
+        </div>
+        <div className="flex flex-col m2">
+          <label htmlFor="description">Description:</label>
+          <textarea
+            className="bg-neutral-200 rounded-md p-1"
+            id="description"
+            name="description"
+            placeholder="description"
+            value={description}
+            onChange={(event) => {
+              setDescription(event.target.value);
+            }}
+            required
+          ></textarea>
+        </div>
 
-        <label htmlFor="motif">Motife:</label>
-        <input
-          type="text"
-          id="motif"
-          name="motif"
-          placeholder="motif"
-          value={motif}
-          onChange={(event) => {
-            setMotif(event.target.value);
-          }}
-          required
-        />
-        <br />
-        <br />
-
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          placeholder="description"
-          value={description}
-          onChange={(event) => {
-            setDescription(event.target.value);
-          }}
-          required
-        ></textarea>
-        <br />
-        <br />
-
-        <div>
+        <div className="m-2 my-8 bg-neutral-200 rounded-md">
           {daysOfWeek.map((day) => (
             <button
               key={day}
@@ -116,9 +117,10 @@ export default function AppointmentForm({ setNewForm }) {
           ))}
         </div>
 
-        <div>
+        <div className="flex flex-col m2">
           <label htmlFor="timeInput">Starting Time:</label>
           <select
+            className="border-collapse border border-slate-500 rounded-md p-1"
             id="timeInput"
             value={startTime}
             onChange={(event) => {
@@ -137,9 +139,10 @@ export default function AppointmentForm({ setNewForm }) {
             })}
           </select>
         </div>
-        <div>
+        <div className="flex flex-col m2">
           <label htmlFor="timeInput">Ending Time:</label>
           <select
+            className="border-collapse border border-slate-500 rounded-md p-1"
             id="timeInput"
             value={endTime}
             onChange={(event) => {
