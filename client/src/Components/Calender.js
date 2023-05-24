@@ -64,7 +64,7 @@ const Calendar = () => {
             <tr key={hour}>
               <td
                 className="border-t border-gray-300 p-2"
-                style={{ width: "2vw", height: "8vh" }}
+                style={{ width: "2vw", height: "6vh" }}
               >
                 <div style={{ marginTop: "-5.5vh", marginLeft: "-5vw" }}>
                   {hour}:00
@@ -85,14 +85,14 @@ const Calendar = () => {
                     <div
                       className={
                         appointment
-                          ? "absolute inset-0 overflow-auto w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg"
+                          ? "absolute inset-0 overflow-hidden w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg"
                           : ""
                       }
                       style={{
                         height: `${
-                          ((appointment?.end - appointment?.start) * 8) / 100
+                          ((appointment?.end - appointment?.start) * 6) / 100
                         }vh`,
-                        marginTop: appointment?.start % 100 !== 0 ? "4vh" : "0",
+                        marginTop: appointment?.start % 100 !== 0 ? "3vh" : "0",
                       }}
                     >
                       <p>{appointment?.Name}</p>
