@@ -112,6 +112,11 @@ app.use(express.json());
 // Use the cors middleware
 app.use(cors());
 
+// Welcome route
+app.get("/", (req, res) => {
+  res.send("Welcome to the server!");
+});
+
 // API endpoint to retrieve data
 app.get("/api/formdata", (req, res) => {
   FormData.find()
