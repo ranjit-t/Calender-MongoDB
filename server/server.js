@@ -80,7 +80,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const port = 3005;
+const port = process.env.PORT || 3005;
 
 const uri =
   "mongodb+srv://ranjiththota:ranjiththota@cluster0.t8lms3t.mongodb.net/?retryWrites=true&w=majority";
