@@ -1,40 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useFetch from "../CustomHooks/useFetch";
 
-const Calendar = () => {
-  const [appointments, setAppointments] = useState([]);
-
+const Calendar = ({ newDataAdded }) => {
+  const [data, fetchData] = useFetch();
   useEffect(() => {
-    const initialAppointments = [
-      {
-        Name: "Kevin",
-        Motif: "Premier Consult",
-        start: "1050",
-        end: "1450",
-        day: "Lundi",
-      },
-      {
-        Name: "Kevin",
-        Motif: "Premier Consult",
-        start: "1650",
-        end: "1800",
-        day: "Lundi",
-      },
-      {
-        Name: "Ram",
-        start: "1200",
-        end: "1400",
-        day: "Mercredi",
-      },
-      {
-        Name: "Sam",
-        start: "1200",
-        end: "1500",
-        day: "Samedi",
-      },
-    ];
-
-    setAppointments(initialAppointments);
-  }, []);
+    fetchData("http://localhost:5005/api/formdata");
+  }, [newDataAdded, fetchData]);
 
   const daysOfWeek = [
     "Lundi",
@@ -71,12 +42,19 @@ const Calendar = () => {
                 </div>
               </td>
               {daysOfWeek.map((day, index) => {
-                const appointment = appointments.find(
+                const appointment = data?.find(
                   (appt) =>
-                    appt.day === day &&
-                    `${hour}00` <= appt.start &&
-                    appt.start < `${hour + 1}00`
+                    appt.date === day &&
+                    `${hour.toString().padStart(2, "0")}00` <= appt.startTime &&
+                    appt.startTime <
+                      `${(hour + 1).toString().padStart(2, "0")}00`
                 );
+
+                const slotHeight =
+                  Math.round(
+                    (appointment?.endTime - appointment?.startTime) / 50
+                  ) * 50;
+
                 return (
                   <td
                     key={index}
@@ -85,18 +63,28 @@ const Calendar = () => {
                     <div
                       className={
                         appointment
-                          ? "absolute inset-0 overflow-hidden w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg"
+                          ? "absolute inset-0 overflow-hidden w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg border border-gray-300"
                           : ""
                       }
                       style={{
-                        height: `${
-                          ((appointment?.end - appointment?.start) * 6) / 100
-                        }vh`,
-                        marginTop: appointment?.start % 100 !== 0 ? "3vh" : "0",
+                        height: `${(slotHeight * 6) / 100}vh`,
+                        marginTop:
+                          appointment?.startTime % 100 !== 0 ? "3vh" : "0",
                       }}
                     >
-                      <p>{appointment?.Name}</p>
-                      <p>{appointment?.Motif}</p>
+                      {appointment && (
+                        <div className="text-xs">
+                          <p>{appointment?.name}</p>
+                          <p className="text-slate-600">{`${appointment?.startTime.replace(
+                            /(\d{2})(\d{2})/,
+                            "$1:$2"
+                          )} to ${appointment?.endTime.replace(
+                            /(\d{2})(\d{2})/,
+                            "$1:$2"
+                          )}`}</p>
+                          <p>{appointment?.motif}</p>
+                        </div>
+                      )}
                     </div>
                   </td>
                 );

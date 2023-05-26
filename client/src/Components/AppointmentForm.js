@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 
-export default function AppointmentForm({ setNewForm }) {
+export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [date, setDate] = useState("Lundi");
   const [name, setName] = useState("");
   const [motif, setMotif] = useState("");
   const [description, setDescription] = useState("");
+
+  const [message, setMessage] = useState("");
+  const [isSucessMessage, setIsSucessMessage] = useState(false);
 
   const daysOfWeek = [
     "Lundi",
@@ -45,10 +48,18 @@ export default function AppointmentForm({ setNewForm }) {
       .then((data) => {
         console.log("Form data submitted:", data);
         // Perform any additional actions after successful form submission
+        setNewDataAdded((prev) => !prev);
+        setIsSucessMessage(true);
+        setMessage("Votre rendez-vous est ajouté");
+        setTimeout(() => {
+          setIsFormOpen(false);
+        }, 2000);
       })
       .catch((error) => {
         console.error("Error submitting form data:", error);
         // Handle any error that occurred during form submission
+        setIsSucessMessage(false);
+        setMessage("oups il y a une erreur");
       });
   };
 
@@ -79,7 +90,7 @@ export default function AppointmentForm({ setNewForm }) {
             type="text"
             id="motif"
             name="motif"
-            placeholder="motif"
+            placeholder="Motif"
             value={motif}
             onChange={(event) => {
               setMotif(event.target.value);
@@ -93,7 +104,7 @@ export default function AppointmentForm({ setNewForm }) {
             className="bg-neutral-200 rounded-md p-1"
             id="description"
             name="description"
-            placeholder="description"
+            placeholder="Description"
             value={description}
             onChange={(event) => {
               setDescription(event.target.value);
@@ -101,7 +112,6 @@ export default function AppointmentForm({ setNewForm }) {
             required
           ></textarea>
         </div>
-
         <div className="m-2 my-8 bg-neutral-200 rounded-md">
           {daysOfWeek.map((day) => (
             <button
@@ -116,7 +126,6 @@ export default function AppointmentForm({ setNewForm }) {
             </button>
           ))}
         </div>
-
         <div className="flex flex-col m2">
           <label htmlFor="timeInput">Starting Time:</label>
           <select
@@ -162,8 +171,13 @@ export default function AppointmentForm({ setNewForm }) {
           </select>
         </div>
         <br />
-        <br />
+        {message && (
+          <p className={isSucessMessage ? "text-green-400" : "text-red-400"}>
+            {message}
+          </p>
+        )}
 
+        <br />
         <button
           type="submit"
           className="border border-collapse mb-2 bg-emerald-700 text-white p-1 rounded-md w-32 hover:bg-emerald-900"
@@ -174,7 +188,7 @@ export default function AppointmentForm({ setNewForm }) {
       <button
         className="border border-collapse bg-rose-500 text-white p-1 rounded-md hover:bg-rose-600"
         onClick={() => {
-          setNewForm(false);
+          setIsFormOpen(false);
         }}
       >
         Annuler
