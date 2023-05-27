@@ -80,10 +80,10 @@ const Calendar = ({ newDataAdded }) => {
                           <p>{appointment?.name}</p>
                           <p className="text-slate-600">{`${appointment?.startTime.replace(
                             /(\d{2})(\d{2})/,
-                            "$1:$2"
-                          )} to ${appointment?.endTime.replace(
+                            "$1h$2"
+                          )} à ${appointment?.endTime.replace(
                             /(\d{2})(\d{2})/,
-                            "$1:$2"
+                            "$1h$2"
                           )}`}</p>
                           <p>{appointment?.motif}</p>
                         </div>

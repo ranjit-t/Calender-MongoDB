@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="App flex flex-col items-center m-8 relative">
-      <h1 className="text-4xl mb-8">ALLAW - CALENDRIER</h1>
+      <h1 className="text-2xl mb-8">ALLAW - CALENDRIER</h1>
       <Calendar newDataAdded={newDataAdded} />
       <button
         className="border border-collapse m-8 bg-sky-400 text-white w-32 rounded-md hover:bg-sky-600 "
