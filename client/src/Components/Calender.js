@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useFetch from "../CustomHooks/useFetch";
 
 const Calendar = ({ newDataAdded }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [data, fetchData] = useFetch();
   useEffect(() => {
     fetchData("http://localhost:5005/api/formdata");
   }, [newDataAdded, fetchData]);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 2000);
+  }, []);
 
   const daysOfWeek = [
     "Lundi",
@@ -18,16 +24,15 @@ const Calendar = ({ newDataAdded }) => {
   ];
 
   if (!data) {
-    return (
-      <div>
-        Vous n'avez pas de rendez-vous. Ajoutez un rendez-vous pour visualiser
-        le calendrier.
-      </div>
-    );
+    if (!isLoaded) {
+      return <div>...Chargement</div>;
+    } else {
+      return <div>Aucune donnée disponible</div>;
+    }
   }
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <div className="h-full flex items-center justify-center ">
       <table className="calendar">
         <thead>
           <tr>

@@ -48,6 +48,12 @@ export default function AppointmentForm({
     };
     // console.log(formData);
 
+    if (!data) {
+      setIsSucessMessage(false);
+      setMessage("il y a un problème de connexion, essayez plus tard");
+      return;
+    }
+
     if (formData.startTime >= formData.endTime) {
       setIsSucessMessage(false);
       setMessage("veuillez vérifier les heures de début et de fin");
@@ -105,7 +111,7 @@ export default function AppointmentForm({
   };
 
   return (
-    <div>
+    <div className="relative">
       <h1 className="text-2xl font-bold mb-4">Ajouter un RDV</h1>
 
       <form onSubmit={handleSubmit}>
@@ -160,8 +166,8 @@ export default function AppointmentForm({
           ></textarea>
         </div>
 
-        <div className="mt-4">
-          <p className="font-bold text-left ml-2">Jour</p>
+        <div>
+          <p className="font-bold  ">Jour</p>
           <div className="m-2 mb-8 bg-neutral-200 rounded-md">
             {daysOfWeek.map((day) => (
               <button
@@ -179,9 +185,9 @@ export default function AppointmentForm({
             ))}
           </div>
         </div>
-        <div className="flex flex-col m2">
-          <p className="font-bold text-left ml-2">Horaires</p>
-          <label className="text-sky-400">Début :</label>
+        <div className="flex flex-col">
+          <p className="font-bold">Horaires</p>
+          <label className="text-sky-400">Début:</label>
           <select
             className="border-collapse border border-slate-500 rounded-md p-1"
             value={startTime}
@@ -207,7 +213,7 @@ export default function AppointmentForm({
           </select>
         </div>
         <div className="flex flex-col m2">
-          <label className="text-sky-400">Fin :</label>
+          <label className="text-sky-400">Fin:</label>
           <select
             className="border-collapse border border-slate-500 rounded-md p-1"
             value={endTime}
@@ -240,21 +246,20 @@ export default function AppointmentForm({
           </p>
         )}
 
-        <br />
         <button
           type="submit"
-          className="border border-collapse mb-2 bg-emerald-700 text-white p-1 rounded-md w-32 hover:bg-emerald-900"
+          className="border border-collapse mb-2 bg-sky-400 text-white  rounded-md px-2 hover:bg-sky-600"
         >
           Enregistrer
         </button>
       </form>
       <button
-        className="border border-collapse bg-rose-500 text-white p-1 rounded-md hover:bg-rose-600"
+        className="border border-collapse bg-gray-100 font-bold  px-2 rounded-md hover:bg-gray-200 absolute -right-8 -top-8"
         onClick={() => {
           setIsFormOpen(false);
         }}
       >
-        Annuler
+        X
       </button>
     </div>
   );
