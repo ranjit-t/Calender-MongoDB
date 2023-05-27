@@ -17,11 +17,11 @@ function App() {
           setIsFormOpen((prev) => !prev);
         }}
       >
-        Ajour RDV
+        Ajouter RDV
       </button>
       {isFormOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 ">
-          <div className="bg-white p-4 drop-shadow-lg rounded-lg p-8">
+        <div className="fixed inset-0 flex items-center justify-center  ">
+          <div className="bg-white p-4 shadow-2xl shadow-gray-500 rounded-lg p-8">
             <AppointmentForm
               setIsFormOpen={setIsFormOpen}
               setNewDataAdded={setNewDataAdded}

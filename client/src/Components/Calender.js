@@ -24,8 +24,11 @@ const Calendar = ({ newDataAdded }) => {
           <tr>
             <th></th>
             {daysOfWeek.map((day) => (
-              <th key={day} className="overflow-hidden max-w-[10vw]">
-                <div>{day}</div>
+              <th
+                key={day}
+                className="overflow-hidden max-w-[10vw] border-r border-l border-gray-300"
+              >
+                <div className="font-normal text-[14px]">{day}</div>
               </th>
             ))}
           </tr>
@@ -34,7 +37,7 @@ const Calendar = ({ newDataAdded }) => {
           {[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((hour) => (
             <tr key={hour}>
               <td
-                className="border-t border-gray-300 p-2"
+                className="border-t border-gray-300 p-2 font-normal text-[14px]"
                 style={{ width: "2vw", height: "6vh" }}
               >
                 <div style={{ marginTop: "-4vh", marginLeft: "-5vw" }}>
@@ -73,7 +76,7 @@ const Calendar = ({ newDataAdded }) => {
                       }}
                     >
                       {appointment && (
-                        <div className="text-xs">
+                        <div className="text-[10px] text-white font-bold">
                           <p>{appointment?.name}</p>
                           <p className="text-slate-600">{`${appointment?.startTime.replace(
                             /(\d{2})(\d{2})/,

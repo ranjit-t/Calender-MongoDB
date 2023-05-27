@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useFetch from "../CustomHooks/useFetch";
 
-export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
+export default function AppointmentForm({
+  setIsFormOpen,
+  setNewDataAdded,
+  newDataAdded,
+}) {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [date, setDate] = useState("Lundi");
@@ -25,6 +30,11 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
     setDate(day);
   };
 
+  const [data, fetchData] = useFetch();
+  useEffect(() => {
+    fetchData("http://localhost:5005/api/formdata");
+  }, [newDataAdded, fetchData]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -36,31 +46,62 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
       startTime: startTime.replace(":", ""),
       endTime: endTime.replace(":", ""),
     };
-    console.log(formData);
-    fetch("http://localhost:5005/api/formdata ", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Form data submitted:", data);
-        // Perform any additional actions after successful form submission
-        setNewDataAdded((prev) => !prev);
-        setIsSucessMessage(true);
-        setMessage("Votre rendez-vous est ajouté");
-        setTimeout(() => {
-          setIsFormOpen(false);
-        }, 2000);
+    // console.log(formData);
+
+    if (formData.startTime >= formData.endTime) {
+      setIsSucessMessage(false);
+      setMessage("veuillez vérifier les heures de début et de fin");
+      return;
+    }
+
+    const filterData = data.filter(
+      (apmt) =>
+        apmt.date === formData.date &&
+        ((formData.startTime >= apmt.startTime &&
+          formData.startTime < apmt.endTime) ||
+          (formData.endTime > apmt.startTime &&
+            formData.endTime <= apmt.endTime) ||
+          (formData.startTime <= apmt.startTime &&
+            formData.endTime >= apmt.endTime))
+    );
+    // console.log(filterData[0]);
+
+    if (filterData.length === 0) {
+      // The appointment slot is free
+      console.log("Appointment can be added:", formData);
+      setIsSucessMessage(true);
+      setMessage("Votre rendez-vous est ajouté");
+
+      fetch("http://localhost:5005/api/formdata ", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       })
-      .catch((error) => {
-        console.error("Error submitting form data:", error);
-        // Handle any error that occurred during form submission
-        setIsSucessMessage(false);
-        setMessage("oups il y a une erreur");
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("Form data submitted:", data);
+
+          setNewDataAdded((prev) => !prev);
+          setIsSucessMessage(true);
+          setMessage("Votre rendez-vous est ajouté");
+          setTimeout(() => {
+            setIsFormOpen(false);
+          }, 2000);
+        })
+        .catch((error) => {
+          console.error("Error submitting form data:", error);
+          setIsSucessMessage(false);
+          setMessage("oups il y a une erreur");
+        });
+    } else {
+      // The new appointment clashes with existing data
+      console.log("Appointment timing clashes with existing data");
+
+      setIsSucessMessage(false);
+      setMessage("ce créneau est déjà pris, choisissez d'autres horaires");
+    }
   };
 
   return (
@@ -69,13 +110,15 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
 
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col m2">
-          <label htmlFor="name">Nom : </label>
+          <label htmlFor="name" className="font-bold">
+            Nom :
+          </label>
           <input
-            className=" rounded-md p-1 bg-neutral-200"
+            className=" rounded-md p-1 bg-neutral-200 mb-4"
             type="text"
             id="name"
             name="name"
-            placeholder="Nom"
+            placeholder="Luke Skywalker"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -84,13 +127,15 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
           />
         </div>
         <div className="flex flex-col m2">
-          <label htmlFor="motif">Motif : </label>
+          <label htmlFor="motif" className="font-bold">
+            Motif :
+          </label>
           <input
-            className="bg-neutral-200 rounded-md p-1"
+            className="bg-neutral-200 rounded-md p-1 mb-4"
             type="text"
             id="motif"
             name="motif"
-            placeholder="Motif"
+            placeholder="Première consultation"
             value={motif}
             onChange={(event) => {
               setMotif(event.target.value);
@@ -99,12 +144,14 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
           />
         </div>
         <div className="flex flex-col m2">
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="description" className="font-bold">
+            Description:
+          </label>
           <textarea
-            className="bg-neutral-200 rounded-md p-1"
+            className="bg-neutral-200 rounded-md p-1 mb-4"
             id="description"
             name="description"
-            placeholder="Description"
+            placeholder="Je souhaite..."
             value={description}
             onChange={(event) => {
               setDescription(event.target.value);
@@ -112,59 +159,75 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
             required
           ></textarea>
         </div>
-        <div className="m-2 my-8 bg-neutral-200 rounded-md">
-          {daysOfWeek.map((day) => (
-            <button
-              key={day}
-              type="button"
-              className={`day-button ${
-                date === day ? "bg-sky-400 text-white p-2 rounded-md" : "p-2"
-              }`}
-              onClick={() => handleDayButtonClick(day)}
-            >
-              {day}
-            </button>
-          ))}
+
+        <div className="mt-4">
+          <p className="font-bold text-left ml-2">Jour</p>
+          <div className="m-2 mb-8 bg-neutral-200 rounded-md">
+            {daysOfWeek.map((day) => (
+              <button
+                key={day}
+                type="button"
+                className={`day-button ${
+                  date === day
+                    ? "bg-sky-400 text-white p-2 rounded-md"
+                    : "p-2 text-slate-500"
+                }`}
+                onClick={() => handleDayButtonClick(day)}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="flex flex-col m2">
-          <label htmlFor="timeInput">Starting Time:</label>
+          <p className="font-bold text-left ml-2">Horaires</p>
+          <label className="text-sky-400">Début :</label>
           <select
             className="border-collapse border border-slate-500 rounded-md p-1"
-            id="timeInput"
             value={startTime}
             onChange={(event) => {
               setStartTime(event.target.value);
             }}
           >
-            <option value="">-- Select Time --</option>
+            <option value="">-- heure de début --</option>
             {[...Array(13)].map((_, index) => {
               const hour = index + 8;
+              const paddedHour = hour.toString().padStart(2, "0");
               return (
                 <React.Fragment key={hour}>
-                  <option value={`${hour}:00`}>{`${hour}:00`}</option>
-                  <option value={`${hour}:30`}>{`${hour}:30`}</option>
+                  <option
+                    value={`${paddedHour}:00`}
+                  >{`${paddedHour}:00`}</option>
+                  <option
+                    value={`${paddedHour}:30`}
+                  >{`${paddedHour}:30`}</option>
                 </React.Fragment>
               );
             })}
           </select>
         </div>
         <div className="flex flex-col m2">
-          <label htmlFor="timeInput">Ending Time:</label>
+          <label className="text-sky-400">Fin :</label>
           <select
             className="border-collapse border border-slate-500 rounded-md p-1"
-            id="timeInput"
             value={endTime}
             onChange={(event) => {
               setEndTime(event.target.value);
             }}
+            required
           >
-            <option value="">-- Select Time --</option>
+            <option value="">-- heure de fin --</option>
             {[...Array(13)].map((_, index) => {
               const hour = index + 8;
+              const paddedHour = hour.toString().padStart(2, "0");
               return (
                 <React.Fragment key={hour}>
-                  <option value={`${hour}:00`}>{`${hour}:00`}</option>
-                  <option value={`${hour}:30`}>{`${hour}:30`}</option>
+                  <option
+                    value={`${paddedHour}:00`}
+                  >{`${paddedHour}:00`}</option>
+                  <option
+                    value={`${paddedHour}:30`}
+                  >{`${paddedHour}:30`}</option>
                 </React.Fragment>
               );
             })}
@@ -182,7 +245,7 @@ export default function AppointmentForm({ setIsFormOpen, setNewDataAdded }) {
           type="submit"
           className="border border-collapse mb-2 bg-emerald-700 text-white p-1 rounded-md w-32 hover:bg-emerald-900"
         >
-          Ajouter
+          Enregistrer
         </button>
       </form>
       <button
