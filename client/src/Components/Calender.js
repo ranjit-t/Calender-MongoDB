@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import useFetch from "../CustomHooks/useFetch";
 
-const Calendar = ({ newDataAdded }) => {
+const Calendar = ({
+  newDataAdded,
+  setshowAppointment,
+  setCurrentAppointment,
+}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [data, fetchData] = useFetch();
   useEffect(() => {
@@ -70,7 +74,7 @@ const Calendar = ({ newDataAdded }) => {
                 return (
                   <td
                     key={index}
-                    className="relative border border-gray-300 p-2 w-[10vw]"
+                    className="relative border border-gray-300 p-2 w-[10vw] "
                   >
                     {appointments.map((appointment, appIndex) => {
                       const slotHeight =
@@ -82,15 +86,19 @@ const Calendar = ({ newDataAdded }) => {
                         <div
                           key={appIndex}
                           className={
-                            "absolute inset-0 overflow-hidden w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg border border-gray-300"
+                            "absolute inset-0 overflow-hidden w-[10vw] bg-sky-400 flex flex-col justify-center rounded-lg border border-gray-300 cursor-pointer"
                           }
                           style={{
                             height: `${(slotHeight * 6) / 100}vh`,
                             marginTop:
                               appointment.startTime % 100 !== 0 ? "3vh" : "0",
                           }}
+                          onClick={() => {
+                            setshowAppointment(true);
+                            setCurrentAppointment({ ...appointment });
+                          }}
                         >
-                          <div className="text-[10px] text-white font-bold">
+                          <div className="text-[10px] text-white font-bold z-10">
                             <p>{appointment.name}</p>
                             <p className="text-slate-600">{`${appointment.startTime.replace(
                               /(\d{2})(\d{2})/,
