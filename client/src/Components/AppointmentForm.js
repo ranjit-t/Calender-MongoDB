@@ -70,11 +70,10 @@ export default function AppointmentForm({
           (formData.startTime <= apmt.startTime &&
             formData.endTime >= apmt.endTime))
     );
-    // console.log(filterData[0]);
 
     if (filterData.length === 0) {
       // The appointment slot is free
-      console.log("Appointment can be added:", formData);
+      // console.log("Appointment can be added:", formData);
       setIsSucessMessage(true);
       setMessage("Votre rendez-vous est ajouté");
 
@@ -103,7 +102,7 @@ export default function AppointmentForm({
         });
     } else {
       // The new appointment clashes with existing data
-      console.log("Appointment timing clashes with existing data");
+      // console.log("Appointment timing clashes with existing data");
 
       setIsSucessMessage(false);
       setMessage("ce créneau est déjà pris, choisissez d'autres horaires");
